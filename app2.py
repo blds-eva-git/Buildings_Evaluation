@@ -1,22 +1,3 @@
-"""
-Refactored and extended Flask application
-- Modular structure in single-file (for demo / portability)
-- Better error handling, logging, services, blueprints
-- Image processing service (resize, thumbnail, metadata)
-- Database access layer with sqlite3 wrapper and schema init
-- Admin blueprint with auth decorators
-- API endpoints (JSON) and CSV export
-- File streaming (zip of images)
-- Background-like tasks simulated synchronously (no real background threads)
-- CLI helpers for init-db and sample data
-- Extensive docstrings, type hints, and validation
-
-NOTES:
-- This single file is intentionally verbose and contains additional helper functions
-  and documentation to be used as an example. It's ready to be split into modules.
-
-"""
-
 from __future__ import annotations
 
 import csv
@@ -51,7 +32,6 @@ from flask import (
     url_for,
 )
 
-# Optional imports - PIL is used in original. Keep it optional but prefer installed.
 try:
     from PIL import Image, ImageOps, ExifTags
 except Exception:  # pragma: no cover - fallback
@@ -70,7 +50,6 @@ SECRET_KEY = os.environ.get("FLASK_SECRET_KEY", "replace_with_production_secret"
 MAX_IMAGE_COUNT = 17
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 
-# Simple admin credentials (for demo) - in production, use hashed passwords & proper users table
 ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
 ADMIN_PASSWORD_HASH = os.environ.get("ADMIN_PASSWORD_HASH")
 # If ADMIN_PASSWORD_HASH not set, we generate the hash of 'admin'
@@ -855,12 +834,6 @@ def seed_sample_data(n: int = 5) -> None:
     logger.info("Seeded %s sample records", n)
 
 
-# =============================================
-# Templates placeholders
-# =============================================
-
-# For this single-file example we won't include full HTML templates. In real use, split templates.
-# The application will still reference template names; ensure templates are created in templates/.
 
 # =============================================
 # Main
