@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Item Listing</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buildings Evaluation Survey Form</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <!-- <h2>Select Non-Reviewed Items</h2> -->
+  <!-- <form method="POST"> -->
+  <div class="container">
+    <div class="topnav" id="myTopnav">
+      <a href="{{ url_for('index') }}" class="logo">Buildings Evaluation</a>
+      <div class="menu-links">
+        <a href="{{ url_for('index') }}">Add Listing</a>
+        <a href="{{ url_for('admin_dashboard') }}">Review Listings</a>
+        <a href="{{ url_for('reviewed_listings') }}">Reviewed Listings</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">&#9776;</a>
+    </div>
+    <br>  
+      <form action="/select_r" method="POST">
+        <label for="item_select">Select reviewed item :</label><br>
+        <select name="selected_items" id="item_select" required>
+            <option disabled selected value="">-- Choose an item --</option>
+            {% for item in items %}
+                <option value="{{ item[0] }}">ID: {{ item[0] }} - DateTime: {{ item[30] }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <button type="submit">Select Record</button>
+    </form>
+
+    <script>
+      function toggleMenu() {
+        document.getElementById("myTopnav").classList.toggle("responsive");
+      }
+    </script>
+    
+</body>
+</html>

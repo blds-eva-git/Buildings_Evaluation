@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buildings Evaluation Survey Form</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    
+    <script>
+        function handleImageToggle(select, id, requiredInputs = [], additionalId = null) {
+            const uploadDiv = document.getElementById(id);
+            const extraDiv = additionalId ? document.getElementById(additionalId) : null;
+
+            // Check whether to show the divs based on the selected option
+            const shouldShow = select.value === 'Yes' || select.value === 'Corrosion/Spalling';
+
+            // Toggle visibility of the upload divs
+            uploadDiv.style.display = shouldShow ? 'block' : 'none';
+            if (extraDiv) extraDiv.style.display = shouldShow ? 'block' : 'none';
+
+            // Get all file inputs inside the div
+            const inputs = uploadDiv.querySelectorAll('input[type="file"]');
+
+            // Loop through all file inputs to set the 'required' attribute
+            inputs.forEach((input, index) => {
+                if (shouldShow && requiredInputs.includes(index)) {
+                    // Add 'required' attribute only to specified inputs
+                    input.setAttribute('required', 'required');
+                } else {
+                    // Remove 'required' attribute from all inputs if div is hidden or it's not in the required list
+                    input.removeAttribute('required');
+                }
+            });
+        }
+    </script>
+
+</head>
+<body>
+
+    <!-- {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div>
+          {% for category, message in messages %}
+            <div class="flash-message {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %} -->
+
+    
+    <div class="container">
+        <div class="topnav" id="myTopnav">
+          <a href="{{ url_for('index') }}" class="logo">Buildings Evaluation</a>
+          <div class="menu-links">
+            <a href="{{ url_for('index') }}">Add Listing</a>
+            <a href="{{ url_for('admin_dashboard') }}">Review Listings</a>
+            <a href="{{ url_for('reviewed_listings') }}">Reviewed Listings</a>
+            <a href="#contact">Contact</a>
+          </div>
+          <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">&#9776;</a>
+        </div>
+        <br>
+
+        <h1>1. Choose Location on the Map</h1>
+        <div id="map"></div>
+        <div id="searchContainer">
+            <input type="text" id="addressInput" placeholder="Enter the address and the city and select the location on the map." />
+            <button onclick="searchAddress()">Search</button>
+        </div>
+        <!-- <form action="/submit" method="POST"> -->
+            <form method="POST" enctype="multipart/form-data">
+
+            <input type="hidden" name="location" id="location" required>
+
+            <label for="type_of_use"><strong>2. Select the Type of Use:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="type_of_use" id="type_of_use" required>
+                <option value="Residential">Residential</option>
+                <option value="Industrial">Industrial</option>
+                <option value="Concentrated Audience">Concentrated Audience</option>
+                <option value="Public Building">Public Building</option>
+                <option value="Emergency Building">Emergency Building</option>
+            </select>
+
+            <label for="number_of_users"><strong>3. Number of Users:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="number_of_users" id="number_of_users" required>
+                <option value="0-10">0-10</option>
+                <option value="11-100">11-100</option>
+                <option value="100+">100+</option>
+            </select>
+
+            <label for="importance_category"><strong>4. Building Importance Category:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext"><img src= "{{url_for('static', filename='/Image/importance_category_specs.png')}}" ></span>
+            </span></label>
+            <select name="importance_category" id="importance_category" required>
+                <option value="Σ1">Σ1</option>
+                <option value="Σ2">Σ2</option>
+                <option value="Σ3">Σ3</option>
+                <option value="Σ4">Σ4</option>
+            </select>
+
+            <label for="danger_of"><strong>5. Danger of Objects Falling:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="danger_of" id="danger_of" required onchange="handleImageToggle(this, 'imageUpload', [0])">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+            </select>
+            <div id="imageUpload" style="display: none; margin-top: 10px;">
+                <label for="image1">Upload Image 1 (Required):</label>
+                <input type="file" name="image1" accept="image/*">
+                <label for="image8">Upload Image 2 (Optional):</label>
+                <input type="file" name="image8" accept="image/*">
+                <label for="image9">Upload Image 3 (Optional):</label>
+                <input type="file" name="image9" accept="image/*">
+            </div>
+
+            <label for="number_of_floors"><strong>6. Number of Floors:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <input name="number_of_floors" id="number_of_floors" type="number" min="0" max="20" step="1" value="0" required>
+            <!-- <div id="imageUpload7" style="display: none; margin-top: 10px;"> -->
+            <label for="image">Upload an image (Required):</label>
+            <input type="file" name="image7" accept="image/*" required>
+            <!-- </div> -->
+
+            <label for="condition"><strong>7. Condition of Structure:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="condition" id="condition" required onchange="handleImageToggle(this, 'imageUpload2', [0])">
+                <option value="Good">Good</option>
+                <option value="Corrosion/Spalling">Corrosion/Spalling</option>
+            </select>
+            <div id="imageUpload2" style="display: none; margin-top: 10px;">
+                <label for="image2">Upload Image 1 (Required):</label>
+                <input type="file" name="image2" accept="image/*">
+                <label for="image10">Upload Image 2 (Optional):</label>
+                <input type="file" name="image10" accept="image/*">
+            </div>
+
+            <label for="year"><strong>8. Year of Construction:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <input type="number" id="year" name="year" min="1920" max="2025" step="1" value="1920" required>
+
+            <label for="previous_damages"><strong>9. Previous Damages in Vertical Elements:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="previous_damages" id="previous_damages" required onchange="handleImageToggle(this, 'imageUpload3', [0], 'displaycrack')">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+            </select>
+            <div id="imageUpload3" style="display: none; margin-top: 10px;">
+                <label for="image3">Upload Image 1 (Required):</label>
+                <input type="file" name="image3" accept="image/*">
+                <label for="image11">Upload Image 2 (Optional):</label>
+                <input type="file" name="image11" accept="image/*">
+                <label for="image12">Upload Image 3 (Optional):</label>
+                <input type="file" name="image12" accept="image/*">
+                <label for="image13">Upload Image 4 (Optional):</label>
+                <input type="file" name="image13" accept="image/*">
+                <label for="image14">Upload Image 5 (Optional):</label>
+                <input type="file" name="image14" accept="image/*">
+            </div>
+            <div id="displaycrack" style="display: none; margin-top: 10px;">
+                <label for="displaycrack"><strong>9a. Maximum Crack Width in mm (Approximately):</strong>
+                <span class="tooltip">ℹ️
+                    <span class="tooltiptext">This is an explanatory help</span>
+                </span></label>
+                <select name="crack_width" id="crack_width" required>
+                    <option value="None">None</option>
+                    <option value="0-1mm">0-1mm</option>
+                    <option value="1-3mm">1-3mm</option>
+                    <option value=">3mm">>3mm</option>
+                </select>
+            </div>
+
+            <label for="danger_neighbour"><strong>10. Contact with Neighbouring Building:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="danger_neighbour" id="danger_neighbour" required onchange="handleImageToggle(this, 'imageUpload4', [0])">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+            </select>
+            <div id="imageUpload4" style="display: none; margin-top: 10px;">
+                <label for="image4">Upload Image 1 (Required):</label>
+                <input type="file" name="image4" accept="image/*">
+                <label for="image17">Upload Image 2 (Optional):</label>
+                <input type="file" name="image17" accept="image/*">
+            </div>
+
+            <label for="soft_floor"><strong>11. Soft Floor (Pilotis):</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext"><img src= "{{url_for('static', filename='/Image/pilotis.jpg')}}" width="350" ></span>
+            </span></label>
+            <select name="soft_floor" id="soft_floor" required onchange="handleImageToggle(this, 'imageUpload5', [0])">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+            </select>
+            <div id="imageUpload5" style="display: none; margin-top: 10px;">
+                <label for="image5">Upload an image (Required):</label>
+                <input type="file" name="image5" accept="image/*">
+            </div>
+
+            <label for="short_column"><strong>12. Short Column:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext"><img src= "{{url_for('static', filename='/Image/short_column.jpg')}}" ></span>
+            </span></label>
+            <select name="short_column" id="short_column" required onchange="handleImageToggle(this, 'imageUpload6', [0])">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+            </select>
+            <div id="imageUpload6" style="display: none; margin-top: 10px;">
+                <label for="image6">Upload Image 1 (Required):</label>
+                <input type="file" name="image6" accept="image/*">
+                <label for="image15">Upload Image 2 (Optional):</label>
+                <input type="file" name="image15" accept="image/*">
+                <label for="image16">Upload Image 3 (Optional):</label>
+                <input type="file" name="image16" accept="image/*">
+            </div>
+
+            <label for="basements"><strong>13. Number of Underground Floors:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="basements" id="basements" required>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="At Least 2">At Least 2</option>
+            </select>
+
+            <div style="margin-top: 20px;">
+                <label for="captcha_answer"><strong>Prove you're human: {{ captcha_question }}</strong></label>
+                <input type="number" name="captcha_answer" required>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/map.js') }}"></script>
+
+    <script>
+      function toggleMenu() {
+        document.getElementById("myTopnav").classList.toggle("responsive");
+      }
+    </script>
+
+
+</body>
+</html>

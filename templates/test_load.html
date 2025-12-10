@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <title>Building Evaluation Results</title>
+</head>
+<body>
+    <div id="loader">
+        <div class="spinner"></div>
+        <p style="text-align:center; margin-top: 10px; font-family: sans-serif;">
+            We are evaluating the building...<br>Please wait...
+        </p>
+    </div>
+
+    <div class="container">
+        <div class="topnav" id="myTopnav">
+          <a href="{{ url_for('index') }}" class="logo">Buildings Evaluation</a>
+          <div class="menu-links">
+            <a href="{{ url_for('index') }}">Add Listing</a>
+            <a href="{{ url_for('admin_dashboard') }}">Review Listings</a>
+            <a href="{{ url_for('reviewed_listings') }}">Reviewed Listings</a>
+            <a href="#contact">Contact</a>
+          </div>
+          <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">&#9776;</a>
+        </div>
+
+        <br>
+        <label><h2>Building's Location</h2></label>
+        <div id="map"></div>
+        <br>
+
+        <label><h2>Building's Photos</h2></label>
+
+        <a href="{{ url_for('static', filename='uploads/{}/image_1.jpg'.format(item_id)) }}" target="_blank">
+            <img src="{{ url_for('static', filename='uploads/{}/image_1.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+        </a>
+        <a href="{{ url_for('static', filename='uploads/{}/image_2.jpg'.format(item_id)) }}" target="_blank">
+            <img src="{{ url_for('static', filename='uploads/{}/image_2.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+        </a>
+        <a href="{{ url_for('static', filename='uploads/{}/image_3.jpg'.format(item_id)) }}" target="_blank">
+            <img src="{{ url_for('static', filename='uploads/{}/image_3.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+        </a>
+        <a href="{{ url_for('static', filename='uploads/{}/image_4.jpg'.format(item_id)) }}" target="_blank">
+            <img src="{{ url_for('static', filename='uploads/{}/image_4.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+        </a>
+        <a href="{{ url_for('static', filename='uploads/{}/image_5.jpg'.format(item_id)) }}" target="_blank">
+            <img src="{{ url_for('static', filename='uploads/{}/image_5.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+        </a>
+        <a href="{{ url_for('static', filename='uploads/{}/image_6.jpg'.format(item_id)) }}" target="_blank">
+            <img src="{{ url_for('static', filename='uploads/{}/image_6.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+        </a>
+        <a href="{{ url_for('static', filename='uploads/{}/image_7.jpg'.format(item_id)) }}" target="_blank">
+            <img src="{{ url_for('static', filename='uploads/{}/image_7.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+        </a>
+        <a href="{{ url_for('static', filename='uploads/{}/image_8.jpg'.format(item_id)) }}" target="_blank">
+            <img src="{{ url_for('static', filename='uploads/{}/image_8.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+        </a>
+        <a href="{{ url_for('static', filename='uploads/{}/image_9.jpg'.format(item_id)) }}" target="_blank">
+            <img src="{{ url_for('static', filename='uploads/{}/image_9.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+        </a>
+        <a href="{{ url_for('static', filename='uploads/{}/image_10.jpg'.format(item_id)) }}" target="_blank">
+            <img src="{{ url_for('static', filename='uploads/{}/image_10.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+        </a>
+        <a href="{{ url_for('static', filename='uploads/{}/image_11.jpg'.format(item_id)) }}" target="_blank">
+            <img src="{{ url_for('static', filename='uploads/{}/image_11.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+        </a>
+        <a href="{{ url_for('static', filename='uploads/{}/image_12.jpg'.format(item_id)) }}" target="_blank">
+            <img src="{{ url_for('static', filename='uploads/{}/image_12.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+        </a>
+        <a href="{{ url_for('static', filename='uploads/{}/image_13.jpg'.format(item_id)) }}" target="_blank">
+            <img src="{{ url_for('static', filename='uploads/{}/image_13.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+        </a>
+        <a href="{{ url_for('static', filename='uploads/{}/image_14.jpg'.format(item_id)) }}" target="_blank">
+            <img src="{{ url_for('static', filename='uploads/{}/image_14.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+        </a>
+        <a href="{{ url_for('static', filename='uploads/{}/image_15.jpg'.format(item_id)) }}" target="_blank">
+            <img src="{{ url_for('static', filename='uploads/{}/image_15.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+        </a>
+        <a href="{{ url_for('static', filename='uploads/{}/image_16.jpg'.format(item_id)) }}" target="_blank">
+            <img src="{{ url_for('static', filename='uploads/{}/image_16.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+        </a>
+        <a href="{{ url_for('static', filename='uploads/{}/image_17.jpg'.format(item_id)) }}" target="_blank">
+            <img src="{{ url_for('static', filename='uploads/{}/image_17.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+        </a>
+
+        <br>
+
+        <label><h2>User Input Data</h2></label>
+        <table class="analysis-table" style="margin-top: 10px; border-collapse: collapse;">
+            <tbody>
+              <thead>
+                <tr>
+                  <th>Choice</sub></th>
+                  <th>Selection</th>
+                </tr>
+              </thead>
+              <tr>
+                <td><strong>Type of Use</strong></td>
+                <td><strong>{{ selected_use }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Number of Users</strong></td>
+                <td><strong>{{ number_of_users }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Importance Category</strong></td>
+                <td><strong>{{ importance_category }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Danger of Objects Falling</strong></td>
+                <td><strong>{{ danger_of }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Number of Floors</strong></td>
+                <td><strong>{{ number_of_floors }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Condition of Structure</strong></td>
+                <td><strong>{{ condition }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Year of Construction</strong></td>
+                <td><strong>{{ year }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Previous Damages in Vertical Elements</strong></td>
+                <td><strong>{{ previous_damages }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Contact with Neighbouring Building</strong></td>
+                <td><strong>{{ danger_neighbour }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Soft Floor (Pilotis)</strong></td>
+                <td><strong>{{ soft_floor }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Short Column</strong></td>
+                <td><strong>{{ short_column }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Number of Underground Floors</strong></td>
+                <td><strong>{{ basements }}</strong></td>
+              </tr>
+            </tbody>
+          </table>        
+
+        <br>
+
+        <label><h2>Reviewer's Input Data</h2></label>
+        <table class="analysis-table" style="margin-top: 10px; border-collapse: collapse;">
+            <tbody>
+              <thead>
+                <tr>
+                  <th>Choice</sub></th>
+                  <th>Selection</th>
+                </tr>
+              </thead>
+              <tr>
+                <td><strong>Type of Structural System</strong></td>
+                <td><strong>{{ type_of_struct }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Arrangement of Walls</strong></td>
+                <td><strong>{{ arrangement }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Irregular Structures Vertically</strong></td>
+                <td><strong>{{ irregular_vert }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Irregular Structures Horizontally</strong></td>
+                <td><strong>{{ irregular_hor }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Torsion/Rotation</strong></td>
+                <td><strong>{{ torsion }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Structural Vulnerabilities</strong></td>
+                <td><strong>{{ vulnerabilities }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Heavy Finishes</strong></td>
+                <td><strong>{{ heavy_finishes }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Quality of User Input (1-5)</strong></td>
+                <td><strong>{{ user_quality }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Soil Class</strong></td>
+                <td><strong>{{ soil_class }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Load Bearing Capacity Reduction (R)</strong></td>
+                <td><strong>{{ bearing_capacity }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Total Constructed Area</strong></td>
+                <td><strong>{{ total_area }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Retrofitting Methods</strong></td>
+                <td><strong>{{ retrofitting }}</strong></td>
+              </tr>
+            </tbody>
+          </table>        
+
+        <br>
+
+        <!-- <label><h2>Technical Analysis Data</h2></label><br>
+        <label><h3>Agref Calculation Analysis</h3></label><br>
+        <label style="color: #004080;">Calculated agref : {{ agref  }}</label><br>
+        <label>θ : {{ theta  }}</label><br>
+        <label>η : {{ eta  }}</label><br>
+        <label>b0 : {{ beta_0  }}</label><br>
+        <label>γ1 : {{ gamma_1  }}</label><br>
+        <label>ag : {{ ag  }}</label><br>
+        <label>ag/agref : {{ ag_to_agref  }}</label><br> -->
+
+        <label><h2>Technical Analysis Data</h2></label>
+
+        <!-- <table class="analysis-table" style="margin-top: 10px; border-collapse: collapse;">
+          <tbody>
+            <thead>
+              <tr style="color: #004080;">
+                <th>agref</sub></th>
+                <th>Θ (theta)</th>
+                <th>η (eta)</th>
+                <th>b₀ (beta₀)</th>
+              </tr>
+            </thead>
+            <td><strong>{{ agref }}</strong></td>
+            <td><strong>{{ theta }}</strong></td>
+            <td><strong>{{ eta }}</strong></td>
+            <td><strong>{{ beta_0 }}</strong></td>
+          </tbody>
+        </table> -->
+
+          <table class="analysis-table" style="margin-top: 10px; border-collapse: collapse;">
+            <tbody>
+              <thead>
+                <tr>
+                  <th>Variable</sub></th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tr>
+                <td><strong>agref</strong></td>
+                <td><strong>{{ agref }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Θ (theta)</strong></td>
+                <td><strong>{{ theta }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>η (eta)</strong></td>
+                <td><strong>{{ eta }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>b₀ (beta₀)</strong></td>
+                <td><strong>{{ beta_0 }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>γ1 (gamma_1)</strong></td>
+                <td><strong>{{ gamma_1 }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>ε (epsilon)</strong></td>
+                <td><strong>{{ epsilon }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>ag</strong></td>
+                <td><strong>{{ ag }}</strong></td>
+              </tr>
+              <tr>
+                <td><strong>ag/agref</strong></td>
+                <td><strong>{{ ag_to_agref }}</strong></td>
+              </tr>
+            </tbody>
+          </table>
+
+        <!-- <table class="analysis-table" style="margin-top: 10px; border-collapse: collapse;">
+          <tbody>
+            <thead>
+              <tr style="color: #004080;">
+                <th>γ1 (gamma_1)</sub></th>
+                <th>ε (epsilon)</th>
+                <th>ag</th>
+                <th>ag/agref</th>
+              </tr>
+            </thead>
+            <td><strong>{{ gamma_1 }}</strong></td>
+            <td><strong>{{ epsilon }}</strong></td>
+            <td><strong>{{ ag }}</strong></td>
+            <td><strong>{{ ag_to_agref }}</strong></td>
+          </tbody>
+        </table> -->
+
+
+        <!-- <table>
+            <thead>
+              <tr>
+                <th>α<sub>g</sub> / α<sub>g,ref</sub></th>
+                <th>A (Limited Damage)</th>
+                <th>B (Significant Damage)</th>
+                <th>C (Near Collapse)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>1.80</td><td>A0</td><td>B0</td><td>C0</td></tr>
+              <tr><td>1.30</td><td>A1+</td><td>B1+</td><td>C1+</td></tr>
+              <tr class="green"><td>1.00</td><td>A1</td><td>B1</td><td>C1</td></tr>
+              <tr><td>0.75</td><td>A2+</td><td>B2+</td><td>C2+</td></tr>
+              <tr><td>0.60</td><td>A2</td><td>B2</td><td>C2</td></tr>
+              <tr class="red"><td>0.45</td><td>A3+</td><td>B3+</td><td>C3+</td></tr>
+              <tr><td>0.35</td><td>A3</td><td>B3</td><td>C3</td></tr>
+              <tr><td>0.25</td><td>A4+</td><td>B4+</td><td>C4+</td></tr>
+              <tr><td>&lt;0.25</td><td>A4</td><td>B4</td><td>C4</td></tr>
+            </tbody>
+          </table> -->
+
+        <br><label><h2>Selectivity Level</h2></label>
+        <!-- <center><label><h4>Green Line Reference : Minimum Tolerable Target / Blue Line Reference : Calculated Building's Target </h4></label></center> -->
+        <!-- <div style="text-align: center; margin-bottom: 10px;">
+          <h4 style="color: #333;">
+            <span style="color: green;">Green Line Reference</span> : Minimum Tolerable Target   /   
+            <span style="color: blue;">Blue Line Reference</span> : Calculated Building's Target
+          </h4>
+        </div> -->
+        <table>
+          <thead>
+            <tr style="color: #004080;">
+              <th>α<sub>g</sub> / α<sub>g,ref</sub></th>
+              <th>A (Limited Damage)</th>
+              <th>B (Significant Damage)</th>
+              <th>C (Near Collapse)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for val in reference_values %}
+            <tr class="{% if val == closest_value %}red{% elif val == tolerable %}green{% endif %}">
+            <!-- <tr class="{% if val == tolerable %}red{% endif %}"> -->
+              <td>{{ val }}</td>
+              <td>
+                {# Put your logic or values here corresponding to val #}
+                {% if val == 1.8 %}A0{% elif val == 1.3 %}A1+{% elif val == 1.0 %}A1{% elif val == 0.75 %}A2+{% elif val == 0.6 %}A2{% elif val == 0.45 %}A3+{% elif val == 0.35 %}A3{% elif val == 0.25 %}A4+{% else %}A4{% endif %}
+              </td>
+              <td>
+                {% if val == 1.8 %}B0{% elif val == 1.3 %}B1+{% elif val == 1.0 %}B1{% elif val == 0.75 %}B2+{% elif val == 0.6 %}B2{% elif val == 0.45 %}B3+{% elif val == 0.35 %}B3{% elif val == 0.25 %}B4+{% else %}B4{% endif %}
+              </td>
+              <td>
+                {% if val == 1.8 %}C0{% elif val == 1.3 %}C1+{% elif val == 1.0 %}C1{% elif val == 0.75 %}C2+{% elif val == 0.6 %}C2{% elif val == 0.45 %}C3+{% elif val == 0.35 %}C3{% elif val == 0.25 %}C4+{% else %}C4{% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div style="text-align: center; margin-bottom: 10px;">
+          <h4 style="color: #333;">
+            <span style="color: green;">*Green Line References</span> : Minimum Tolerable Target<br>
+            <span style="color: blue;">*Blue Line References</span> : Calculated Building's Value
+          </h4>
+        </div>
+
+
+    </div>
+
+    <script>
+        // Keep loader for at least 5 seconds
+        window.addEventListener("load", () => {
+            setTimeout(() => {
+                document.body.classList.add("loaded");
+                document.getElementById("content").style.display = "block";
+            }, 2000); // 5000 milliseconds = 5 seconds
+        });
+    </script>
+
+    <!-- <script>
+        // Show content and hide loader when page fully loads
+        window.addEventListener("load", () => {
+            document.body.classList.add("loaded");
+            document.getElementById("content").style.display = "block";
+        });
+    </script> -->
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        var lat = {{ lat }};
+        var lon = {{ lon }};
+
+        var map = L.map('map').setView([lat, lon], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        L.marker([lat, lon]).addTo(map)
+            .bindPopup('Selected Location')
+            .openPopup();
+    </script>
+
+    <script>
+      function toggleMenu() {
+        document.getElementById("myTopnav").classList.toggle("responsive");
+      }
+    </script>
+
+</body>
+</html>

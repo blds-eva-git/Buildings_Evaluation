@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="topnav" id="myTopnav">
+          <a href="{{ url_for('index') }}" class="logo">Buildings Evaluation</a>
+          <div class="menu-links">
+            <a href="{{ url_for('index') }}">Add Listing</a>
+            <a href="{{ url_for('admin_dashboard') }}">Review Listings</a>
+            <a href="{{ url_for('reviewed_listings') }}">Reviewed Listings</a>
+            <a href="#contact">Contact</a>
+          </div>
+          <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">&#9776;</a>
+        </div>
+        <br>
+        <h1>Admin Login</h1>
+        <div class="admin-login-form">
+            <form method="POST">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required><br>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required><br>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+      function toggleMenu() {
+        document.getElementById("myTopnav").classList.toggle("responsive");
+      }
+    </script>
+
+</body>
+</html>

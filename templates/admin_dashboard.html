@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+        <h2>Form Submissions</h2>
+        <table>
+            <tr>
+                <th>Location</th>
+                <th>Type of Use</th>
+                <th>Number of Users</th>
+            </tr>
+            {% for submission in submissions %}
+            <tr>
+                <td>{{ submission.location }}</td>
+                <td>{{ submission.type_of_use }}</td>
+                <td>{{ submission.number_of_users }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>

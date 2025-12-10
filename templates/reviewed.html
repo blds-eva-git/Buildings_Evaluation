@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buildings Evaluation Survey Form</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <script>
+        function handleChoice(select) {
+            const imageUpload = document.getElementById('imageUpload');
+            if (select.value === 'Yes') {
+                imageUpload.style.display = 'block';
+            } else {
+                imageUpload.style.display = 'none';
+            }
+        }
+    </script>
+    <script>
+        function handleChoice2(select) {
+            const imageUpload = document.getElementById('imageUpload2');
+            if (select.value === 'Corrosion/Spalling') {
+                imageUpload.style.display = 'block';
+            } else {
+                imageUpload.style.display = 'none';
+            }
+        }
+    </script>
+    <script>
+        function handleChoice3(select) {
+            const imageUpload = document.getElementById('imageUpload3');
+            if (select.value === 'Yes') {
+                imageUpload.style.display = 'block';
+                // displaycrack.style.display = 'block';
+            } else {
+                imageUpload.style.display = 'none';
+                // displaycrack.style.display = 'none';
+            }
+        }
+    </script>
+    <script>
+        function handleChoice4(select) {
+            const imageUpload = document.getElementById('imageUpload4');
+            if (select.value === 'Yes') {
+                imageUpload.style.display = 'block';
+            } else {
+                imageUpload.style.display = 'none';
+            }
+        }
+    </script>
+    <script>
+        function handleChoice5(select) {
+            const imageUpload = document.getElementById('imageUpload5');
+            if (select.value === 'Yes') {
+                imageUpload.style.display = 'block';
+            } else {
+                imageUpload.style.display = 'none';
+            }
+        }
+    </script>
+    <script>
+        function handleChoice6(select) {
+            const imageUpload = document.getElementById('imageUpload6');
+            if (select.value === 'Yes') {
+                imageUpload.style.display = 'block';
+            } else {
+                imageUpload.style.display = 'none';
+            }
+        }
+    </script>
+
+</head>
+<body>
+
+    <div class="container">
+        <div class="topnav" id="myTopnav">
+          <a href="{{ url_for('index') }}" class="logo">Buildings Evaluation</a>
+          <div class="menu-links">
+            <a href="{{ url_for('index') }}">Add Listing</a>
+            <a href="{{ url_for('admin_dashboard') }}">Review Listings</a>
+            <a href="{{ url_for('reviewed_listings') }}">Reviewed Listings</a>
+            <a href="#contact">Contact</a>
+          </div>
+          <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">&#9776;</a>
+        </div>
+        <br>
+
+        <!-- <center><h1 style="color:DarkRed;"><strong>Reviewing Item with ID : {{item_id}}</strong></h1></center> -->
+        <center><h2>Reviewing Item with ID : <span style="color: brown">{{item_id}}</span></h2></center>
+        <strong>1. Location on the Map</strong>
+        <div id="map"></div>
+        <form method="POST">
+        <!-- <form action="/submit" method="POST"> -->
+        <!-- <form method="POST" enctype="multipart/form-data"> -->
+
+            <input type="hidden" name="location" id="location" value="{{ location  }}" required>
+            <input type="hidden" name="item_id" id="item_id" value="{{ item_id  }}" required>
+
+            <label for="type_of_use"><strong>2. Select the Type of Use:</strong>
+                <span class="tooltip">ℹ️
+                    <span class="tooltiptext">This is an explanatory help</span>
+                </span>
+            </label>
+            <select name="type_of_use" id="type_of_use" required>
+                {% set options = [
+                    "Residential", "Industrial", "Concentrated Audience",
+                    "Public Building", "Emergency Building"
+                ] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == selected_use %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="number_of_users"><strong>3. Number of Users:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="number_of_users" id="number_of_users" required>
+                {% set options = [
+                    "0-10", "11-100", "100+"
+                ] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == number_of_users %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="importance_category"><strong>4. Building Importance Category:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="importance_category" id="importance_category" required>
+                {% set options = [
+                    "Σ1", "Σ2", "Σ3",
+                    "Σ4"
+                ] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == importance_category %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="danger_of"><strong>5. Danger of Objects Falling:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="danger_of" id="danger_of" required onchange="handleChoice(this)">
+                {% set options = [
+                    "No", "Yes"
+                ] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == danger_of %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+            <div id="imageUpload" style="display: none; margin-top: 10px;">
+                <label for="image">Upload an image:</label>
+                <input type="file" name="image" accept="image/*">
+            </div>
+
+            <label for="number_of_floors"><strong>6. Number of Floors:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <input name="number_of_floors" id="number_of_floors" type="number" min="0" max="20" step="1" value="{{ number_of_floors }}" required>
+
+            <label for="condition"><strong>7. Condition of Structure:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="condition" id="condition" required onchange="handleChoice2(this)">
+                {% set options = [
+                    "Good", "Corrosion/Spalling"
+                ] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == condition %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+            <div id="imageUpload2" style="display: none; margin-top: 10px;">
+                <label for="image2">Upload an image:</label>
+                <input type="file" name="image2" accept="image/*">
+            </div>
+
+            <label for="year"><strong>8. Year of Construction:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <input type="number" id="year" name="year" min="1920" max="2030" step="1" value="{{ year  }}" required>
+
+            <label for="previous_damages"><strong>9. Previous Damages in Vertical Elements:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="previous_damages" id="previous_damages" required onchange="handleChoice3(this)">
+                {% set options = [
+                    "No", "Yes"
+                ] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == previous_damages %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+            <div id="imageUpload3" style="display: none; margin-top: 10px;">
+                <label for="image3">Upload an image:</label>
+                <input type="file" name="image3" accept="image/*">
+            </div>
+            <!-- <div id="displaycrack" style="display: none; margin-top: 10px;"> -->
+            <label for="displaycrack"><strong>9a. Maximum Crack Width in mm (Approximately):</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="crack_width" id="crack_width" required>
+                {% set options = [
+                    "None", "0-1mm", "1-3mm", ">3mm"
+                ] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == crack_width %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+            <!-- </div> -->
+
+            <label for="danger_neighbour"><strong>10. Contact with Neighbouring Building:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="danger_neighbour" id="danger_neighbour" required onchange="handleChoice4(this)">
+                {% set options = [
+                    "No", "Yes"
+                ] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == danger_neighbour %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+            <div id="imageUpload4" style="display: none; margin-top: 10px;">
+                <label for="image4">Upload an image:</label>
+                <input type="file" name="image4" accept="image/*">
+            </div>
+
+            <label for="soft_floor"><strong>11. Soft Floor (Pilotis):</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="soft_floor" id="soft_floor" required onchange="handleChoice5(this)">
+                {% set options = [
+                    "No", "Yes"
+                ] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == soft_floor %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+            <div id="imageUpload5" style="display: none; margin-top: 10px;">
+                <label for="image5">Upload an image:</label>
+                <input type="file" name="image5" accept="image/*">
+            </div>
+
+            <label for="short_column"><strong>12. Short Column:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext"><img src= "{{url_for('static', filename='/Image/short_column.jpg')}}" ></span>
+            </span></label>
+            <select name="short_column" id="short_column" required onchange="handleChoice6(this)">
+                {% set options = [
+                    "No", "Yes"
+                ] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == short_column %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+            <div id="imageUpload6" style="display: none; margin-top: 10px;">
+                <label for="image6">Upload an image:</label>
+                <input type="file" name="image6" accept="image/*">
+            </div>
+
+            <label for="basements"><strong>13. Number of Underground Floors:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="basements" id="basements" required onchange="handleChoice6(this)">
+                {% set options = [
+                    "0", "1", "At Least 2"
+                ] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == basements %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+
+            <h2>Image Gallery</h2>
+
+            <a href="{{ url_for('static', filename='uploads/{}/image_1.jpg'.format(item_id)) }}" target="_blank">
+                <img src="{{ url_for('static', filename='uploads/{}/image_1.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+            </a>
+            <a href="{{ url_for('static', filename='uploads/{}/image_2.jpg'.format(item_id)) }}" target="_blank">
+                <img src="{{ url_for('static', filename='uploads/{}/image_2.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+            </a>
+            <a href="{{ url_for('static', filename='uploads/{}/image_3.jpg'.format(item_id)) }}" target="_blank">
+                <img src="{{ url_for('static', filename='uploads/{}/image_3.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+            </a>
+            <a href="{{ url_for('static', filename='uploads/{}/image_4.jpg'.format(item_id)) }}" target="_blank">
+                <img src="{{ url_for('static', filename='uploads/{}/image_4.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+            </a>
+            <a href="{{ url_for('static', filename='uploads/{}/image_5.jpg'.format(item_id)) }}" target="_blank">
+                <img src="{{ url_for('static', filename='uploads/{}/image_5.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+            </a>
+            <a href="{{ url_for('static', filename='uploads/{}/image_6.jpg'.format(item_id)) }}" target="_blank">
+                <img src="{{ url_for('static', filename='uploads/{}/image_6.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+            </a>
+            <a href="{{ url_for('static', filename='uploads/{}/image_7.jpg'.format(item_id)) }}" target="_blank">
+                <img src="{{ url_for('static', filename='uploads/{}/image_7.jpg'.format(item_id)) }}" alt="Image" width="270" onerror="this.style.display='none';">
+            </a>
+
+            <!-- <center><h1 style="color:DarkGreen;"><strong>Reviewers Form for Item with ID : {{item_id}}</strong></h1></center> -->
+        <!-- </form>
+    </div> -->
+    <center><h2>Reviewers Form for Item with ID : <span style="color: green">{{item_id}}</span></h2></center><br>
+    <!-- <div class="container"> -->
+        <!-- <form method="POST" enctype="multipart/form-data"> -->
+            <!-- <center><h2>Reviewers Form for Item with ID : <span style="color: green">{{item_id}}</span></h2></center> -->
+
+            <label for="type_of_struct"><strong>1. Type of Structural System:</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="type_of_struct" id="type_of_struct" required>
+                {% set options = [
+                    "RC-frames", "RC-walls", "Brick walls"
+                ] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == type_of_struct %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="arrangement"><strong>2. Arrangement of Walls</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="arrangement" id="arrangement" required>
+                {% set options = [
+                    "Regular", "Irregular"
+                ] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == arrangement %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="irregular_vert"><strong>3. Irregular Structures Vertically</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="irregular_vert" id="irregular_vert" required>
+                {% set options = [
+                    "No", "Yes"
+                ] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == irregular_vert %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="irregular_hor"><strong>4. Irregular Structures Horizontally</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="irregular_hor" id="irregular_hor" required>
+                {% set options = [
+                    "No", "Yes"
+                ] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == irregular_hor %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="torsion"><strong>5. Torsion/Rotation</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="torsion" id="torsion" required>
+                {% set options = [
+                    "No", "Yes"
+                ] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == torsion %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="vulnerabilities"><strong>6. Structural Vulnerabilities</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="vulnerabilities" id="vulnerabilities" required multiple>
+                {% set options = ["None", "Danger of impact", "Soft floor", "Short column"] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option in vulnerabilities %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="heavy_finishes"><strong>7. Heavy Finishes</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="heavy_finishes" id="heavy_finishes" required>
+                {% set options = [
+                    "No", "Yes"
+                ] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == heavy_finishes %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="user_quality"><strong>8. Quality of User Input (1-5)</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <input type="range" min="1" max="5" type="number" value="{{ user_quality }}" id="user_quality" name="user_quality">
+
+            <label for="soil_class"><strong>9. Soil Class</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="soil_class" id="soil_class" required>
+                {% set options = [
+                    "A", "B", "C"
+                ] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == soil_class %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="bearing_capacity"><strong>10. Load Bearing Capacity Reduction (R)</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="bearing_capacity" id="bearing_capacity" required>
+                {% set options = [
+                    "None", "Flexural cracks", "Multiple flexural cracks", "Diagonal cracks", "Bending reinforcement"
+                ] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == bearing_capacity %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="total_area"><strong>11. Total Constructed Area</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <input type="number" id="total_area" name="total_area" min="0" max="5000" step="1" value="{{ total_area  }}" required>
+
+            <label for="retrofitting"><strong>12. Retrofitting Methods</strong>
+            <span class="tooltip">ℹ️
+                <span class="tooltiptext">This is an explanatory help</span>
+            </span></label>
+            <select name="retrofitting" id="retrofitting" required>
+                <option value="Retrofitting RC-nodes">Retrofitting RC-nodes</option>
+                <option value="Retrofitting RC-beams">Retrofitting RC-beams</option>
+                <option value="Polyurethane joints">Polyurethane joints</option>
+                <option value="FRPU jackets">FRPU jackets</option>
+                {% set options = [
+                    "Retrofitting RC-nodes", "Retrofitting RC-beams", "Polyurethane joints", "FRPU jackets"
+                ] %}
+                {% for option in options %}
+                    <option value="{{ option }}" {% if option == retrofitting %}selected{% endif %}>{{ option }}</option>
+                {% endfor %}
+            </select>
+
+
+            <!-- <button type="submit">Submit</button> -->
+            <div id="searchContainer">
+                <button type="submit" name="action" value="submit">Re-Submit</button>
+                <button class="button-red" type="submit" name="action" value="calculate">Calculate</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        var lat = {{ lat }};
+        var lon = {{ lon }};
+
+        var map = L.map('map').setView([lat, lon], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        L.marker([lat, lon]).addTo(map)
+            .bindPopup('Selected Location')
+            .openPopup();
+    </script>
+
+    <script>
+      function toggleMenu() {
+        document.getElementById("myTopnav").classList.toggle("responsive");
+      }
+    </script>
+
+</body>
+</html>

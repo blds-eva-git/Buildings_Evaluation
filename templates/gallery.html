@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Gallery</title>
+    <style>
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .gallery img {
+            width: 200px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <h2>Image Gallery</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  {% for img_url in images %}
+    <a href="{{ img_url }}" target="_blank">
+      <img src="{{ img_url }}" width="200" height="auto">
+    </a>
+  {% endfor %}
+</div>
+</body>
+</html>
